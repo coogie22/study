@@ -1,0 +1,230 @@
+- *객체(Object)**는 JavaScript에서 데이터를 저장하고 구조화하는 기본 단위로, **속성(프로퍼티, property)**과 **메서드(method)**를 가집니다. 객체는 **키-값** 쌍의 모음으로, 키는 문자열이나 심볼이고, 값은 어떠한 자료형도 될 수 있습니다.
+
+### 1. 객체 생성 방법
+
+### 1) 객체 리터럴
+
+가장 일반적인 객체 생성 방법은 **객체 리터럴**을 사용하는 것입니다.
+
+```jsx
+const person = {
+    name: "John",  // 속성 (property)
+    age: 30,       // 속성 (property)
+    greet: function() {  // 메서드 (method)
+        console.log("Hello!");
+    }
+};
+
+console.log(person.name);  // "John"
+person.greet();            // "Hello!"
+
+```
+
+### 2) `new Object()`로 생성
+
+`new` 키워드를 사용하여 객체를 생성할 수도 있습니다. 하지만 객체 리터럴 방식을 주로 사용합니다.
+
+```jsx
+const person = new Object();
+person.name = "John";
+person.age = 30;
+person.greet = function() {
+    console.log("Hello!");
+};
+
+console.log(person.name);  // "John"
+person.greet();            // "Hello!"
+
+```
+
+### 2. 객체의 구성 요소
+
+### 1) **속성(Property)**
+
+속성은 **키-값** 쌍으로 이루어져 있으며, 객체 내의 데이터를 저장하는 데 사용됩니다. 키는 문자열이나 심볼이며, 값은 다양한 데이터 유형일 수 있습니다.
+
+```jsx
+const person = {
+    name: "John",   // "name"이 키, "John"이 값
+    age: 30         // "age"가 키, 30이 값
+};
+
+```
+
+### 2) **메서드(Method)**
+
+메서드는 **함수**가 객체의 속성으로 들어간 것으로, 객체가 수행할 수 있는 동작을 정의합니다.
+
+```jsx
+const car = {
+    brand: "Toyota",
+    start: function() {
+        console.log("Engine started");
+    }
+};
+
+car.start();  // "Engine started"
+
+```
+
+### 3. 객체 속성에 접근하는 방법
+
+### 1) 점 표기법 (Dot Notation)
+
+가장 일반적인 방식으로, 객체 속성에 점을 사용해 접근합니다.
+
+```jsx
+console.log(person.name);  // "John"
+
+```
+
+### 2) 대괄호 표기법 (Bracket Notation)
+
+속성 이름을 문자열로 전달해 접근할 수 있습니다. 이 방법은 속성 이름이 **변수**일 때 유용합니다.
+
+```jsx
+console.log(person["age"]);  // 30
+
+const key = "name";
+console.log(person[key]);    // "John"
+
+```
+
+### 4. 객체에 속성 추가 및 삭제
+
+### 1) 속성 추가
+
+객체에 새로운 속성을 동적으로 추가할 수 있습니다.
+
+```jsx
+person.height = 180;
+console.log(person.height);  // 180
+
+```
+
+### 2) 속성 삭제
+
+`delete` 키워드를 사용하여 객체에서 속성을 삭제할 수 있습니다.
+
+```jsx
+delete person.age;
+console.log(person.age);  // undefined
+
+```
+
+### 5. 객체와 참조
+
+객체는 **참조 타입**이므로, 객체를 변수에 할당하면 해당 변수는 객체의 참조(주소)를 저장합니다. 따라서 객체의 복사본이 아니라 **원본 객체에 대한 참조**가 이루어집니다.
+
+```jsx
+const person1 = { name: "John" };
+const person2 = person1;  // person1의 참조를 person2에 할당
+
+person2.name = "Jane";  // person2를 통해 수정하면 person1도 바뀜
+console.log(person1.name);  // "Jane"
+
+```
+
+### 6. 객체의 반복(루프)
+
+객체의 속성에 대해 반복하려면 **`for...in`** 루프를 사용할 수 있습니다.
+
+```jsx
+const person = {
+    name: "John",
+    age: 30,
+    city: "New York"
+};
+
+for (let key in person) {
+    console.log(key, person[key]);
+}
+
+// 출력:
+// name John
+// age 30
+// city New York
+
+```
+
+### 7. 객체의 유용한 메서드
+
+### 1) `Object.keys()`
+
+객체의 **모든 키**를 배열로 반환합니다.
+
+```jsx
+const keys = Object.keys(person);
+console.log(keys);  // ["name", "age", "city"]
+
+```
+
+### 2) `Object.values()`
+
+객체의 **모든 값**을 배열로 반환합니다.
+
+```jsx
+const values = Object.values(person);
+console.log(values);  // ["John", 30, "New York"]
+
+```
+
+### 3) `Object.entries()`
+
+객체의 **키-값 쌍**을 배열로 반환합니다.
+
+```jsx
+const entries = Object.entries(person);
+console.log(entries);  // [["name", "John"], ["age", 30], ["city", "New York"]]
+
+```
+
+### 8. 객체와 객체 지향 프로그래밍(OOP)
+
+JavaScript는 **객체 지향 프로그래밍(OOP)** 언어입니다. 객체는 **상태(데이터)**와 **동작(메서드)**를 캡슐화할 수 있는 중요한 개념입니다. 객체 지향 프로그래밍에서는 객체를 통해 데이터와 기능을 묶어내며, 상속, 다형성, 캡슐화 같은 OOP 원칙들을 지원합니다.
+
+### 9. 객체 생성자 함수
+
+객체를 생성하기 위한 또 다른 방법은 **생성자 함수**를 사용하는 것입니다.
+
+```jsx
+function Person(name, age) {
+    this.name = name;
+    this.age = age;
+    this.greet = function() {
+        console.log("Hello, my name is " + this.name);
+    };
+}
+
+const john = new Person("John", 30);
+john.greet();  // "Hello, my name is John"
+
+```
+
+### 10. ES6 클래스 문법
+
+ES6에서는 클래스 문법을 도입해 더 쉽게 객체를 생성하고 상속받을 수 있게 했습니다.
+
+```jsx
+class Person {
+    constructor(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    greet() {
+        console.log(`Hello, my name is ${this.name}`);
+    }
+}
+
+const john = new Person("John", 30);
+john.greet();  // "Hello, my name is John"
+
+```
+
+### 요약
+
+- **객체**는 속성과 메서드의 모음으로, 데이터를 구조화하고 관련된 동작을 묶어내는 핵심 요소입니다.
+- **객체 리터럴**과 **객체 생성자 함수**로 객체를 생성할 수 있습니다.
+- JavaScript는 **참조 타입**을 사용하므로, 객체를 다른 변수에 할당하면 참조를 복사합니다.
+- 객체는 JavaScript의 중요한 부분이며, **OOP** 개념을 지원합니다.
