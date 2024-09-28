@@ -1,0 +1,68 @@
+배열 = 순서가 있는 리스트
+
+1번에 철수 
+2번에 영희
+...
+30번에 영수
+                 0          1           29  = index
+let students = ['철수' , '영희' , ... '영수'];
+
+인덱스는 0부터 시작함
+
+
+console.log(students[1]); // 철수
+console.log(students[2]); // 영희
+console.log(students[29]); // 영수
+
+이런식으로 호출 가능
+
+
+students[0] = '민정'    // 이렇게 수정도 가능
+
+
+
+
+* 배열의 특징
+
+문자 뿐만 아니라 숫자 , 객체 , 함수 등도 포함될 수 있음
+
+length : 배열의 길이
+
+push() : 배열 끝에 추가
+
+let days = ['월' , '화' , '수'];
+days.push('목');
+console.log(days); // ['월' , '화' , '수' , '목']
+
+
+pop() : 배열 끝 요소 제거
+
+let days = ['월' , '화' , '수'];
+days.pop();
+console.log(days); // ['월' , '화']
+
+
+shift , unshift : 배열 앞에 제거/추가
+
+
+* 배열을 사용하는 가장 큰 이유는 반복을 위해서.
+
+for 반복문
+
+let days = ['월' , '화' , '수'];
+
+for(let index = 0; index < days.length; index++){      //  인덱스는 0부터 시작하게 하고, 인덱스가 배열의 렝스, 즉 3보다 작으면
+console.log(days[index])                               //  코드를 실행하고, 인덱스를 1 증가시킴 인덱스는 0에서 2까지 반복
+     }
+
+
+
+for ... of
+
+let days = ['월' , '화' , '수'];
+
+for(let day of days){
+    console.log(day[1]);
+}
+
+// '화'
