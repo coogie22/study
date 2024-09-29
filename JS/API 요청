@@ -1,0 +1,78 @@
+API 요청
+**API(Application Programming Interface)**는 소프트웨어의 구성 요소 간의 상호작용을 정의하는 메커니즘입니다. 프론트엔드에서 백엔드로 데이터를 요청하거나 백엔드에서 데이터를 받아오는 과정을 API 요청이라고 합니다.
+
+JavaScript에서 API 요청
+JavaScript에서는 보통 fetch() API 또는 Axios와 같은 라이브러리를 사용하여 HTTP 요청을 보내고 응답을 처리합니다.
+
+Fetch API: 기본 제공되는 API로, 네트워크 요청을 쉽게 수행할 수 있게 해줍니다.
+
+fetch('http://192.168.1.5:8080/api/data')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+
+
+Axios: 비동기 요청을 더 간편하게 처리할 수 있도록 도와주는 인기 있는 라이브러리입니다.
+
+axios.get('http://192.168.1.5:8080/api/data')
+  .then(response => console.log(response.data))
+  .catch(error => console.error('Error:', error));
+
+이러한 방식으로 프론트엔드에서 백엔드로 데이터를 요청하고 처리하는 과정을 API 통신 또는 AJAX 요청이라고 부르기도 합니다. 
+AJAX(Asynchronous JavaScript and XML)는 비동기적으로 데이터를 요청하고 응답을 처리할 수 있는 기술을 의미합니다.
+
+
+로컬 네트워크에서 IP를 이용한 통신 방법
+스프링 서버가 실행 중인 컴퓨터의 IP 주소 확인:
+
+친구가 서버를 실행하고 있는 컴퓨터에서 로컬 IP 주소를 확인해야 합니다.
+Windows에서 IP 주소 확인 방법:
+명령 프롬프트(cmd)에서 ipconfig 명령을 입력.
+출력된 결과 중 IPv4 Address를 확인. 예를 들어, 192.168.1.5 같은 주소.
+
+스프링 서버가 실행 중인지 확인:
+
+스프링 서버는 보통 8080번 포트에서 실행되므로, 친구가 서버를 실행했을 때 다음과 같은 메시지가 콘솔에 출력될 것입니다:
+
+Tomcat started on port(s): 8080 (http) with context path ''
+
+이 메시지가 출력되면, 서버가 http://192.168.1.5:8080 같은 주소에서 실행되고 있다는 것을 의미합니다(여기서 IP는 예시입니다).
+프론트엔드에서 해당 IP 주소로 요청 보내기:
+
+이제 프론트엔드 코드에서 해당 IP 주소를 사용해 스프링 서버에 요청을 보낼 수 있습니다.
+예를 들어, 친구의 서버가 192.168.1.5라는 IP 주소에서 실행 중이라면:
+
+fetch('http://192.168.1.5:8080/api/data', {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));
+
+
+주의 사항: 방화벽 설정:
+
+친구의 컴퓨터에서 방화벽이 스프링 서버로의 외부 연결을 차단하지 않도록 설정해야 합니다. 기본적으로 로컬 네트워크 통신이 허용되지만, 방화벽이 이를 차단하는 경우 통신이 되지 않을 수 있습니다.
+만약 방화벽 문제로 통신이 되지 않으면, 해당 포트를 열어주는 설정을 해야 합니다.
+
+결론
+
+스프링 서버가 실행되는 컴퓨터의 로컬 IP 주소를 사용하면, 같은 네트워크에 있는 다른 컴퓨터에서 해당 서버에 접근할 수 있습니다. 
+IP 주소와 포트를 정확히 설정하고, 네트워크 및 방화벽 설정이 올바르게 되어 있다면
+프론트엔드(JavaScript)에서 백엔드(Spring)로 요청을 보내고 데이터를 받을 수 있습니다.
+
+
+몇 가지 중요한 점:
+CORS(Cross-Origin Resource Sharing): 로컬에서 다른 서버(친구의 서버)로 요청을 보낼 때 CORS 문제가 발생할 수 있습니다. 이 경우 친구의 스프링 서버에서 CORS를 허용하는 설정을 해야 합니다.
+
+예시로, Spring 서버에서 특정 출처의 요청을 허용하려면 다음과 같이 설정합니다:
+
+@CrossOrigin(origins = "http://localhost:3000")  // 프론트엔드 로컬 주소
+@RestController
+public class MyController {
+    // 엔드포인트들...
+}
+
