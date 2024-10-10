@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>노트북</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- OrbitControls CDN -->
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/r128/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+    <script>
+        // 기본 씬, 카메라, 렌더러 설정
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        
+        // 안티앨리어싱을 활성화하여 렌더러 생성
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // 배경색 흰색으로 설정
+        scene.background = new THREE.Color(0xffffff);
+
+        // 노트북 바디 생성
+        const laptopBaseGeometry = new THREE.BoxGeometry(2, 0.1, 1.2);
+        const laptopBaseMaterial = new THREE.MeshPhongMaterial({ color: 0x333333 });
+        const laptopBase = new THREE.Mesh(laptopBaseGeometry, laptopBaseMaterial);
+        laptopBase.position.set(0, -0.4, 0);
+        scene.add(laptopBase);
+
+        // 화면 생성 (켜진 상태)
+        const screenGeometry = new THREE.BoxGeometry(1.8, 1, 0.05);
+        const screenMaterial = new THREE.MeshPhongMaterial({ color: 0x000000 });
+        const screen = new THREE.Mesh(screenGeometry, screenMaterial);
+        screen.position.set(0, 0.4, 0.6);
+        scene.add(screen);
+
+        // 화면에 GUI 추가
+        const textureLoader = new THREE.TextureLoader();
+        const screenTexture = textureLoader.load('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABaElEQVR42mJ8j8w4z8BqBQgMIGgHQbBCIAXkFQDZRIBASRJQAGzAQTqJ6YGAXMZCEQWRAY8Q2UBwZkKADEWJgCgALtRYAAqBQTQiYBQHDoDEgJgHILIBGkRQCABZrAA4BExIAAAAABJRU5ErkJggg==');
+        const screenMaterialWithTexture = new THREE.MeshBasicMaterial({ map: screenTexture });
+        const screenWithTexture = new THREE.Mesh(screenGeometry, screenMaterialWithTexture);
+        screenWithTexture.position.set(0, 0.4, 0.6);
+        scene.add(screenWithTexture);
+
+        // 키보드 생성
+        const keyboardGeometry = new THREE.BoxGeometry(1.8, 0.02, 0.8);
+        const keyboardMaterial = new THREE.MeshPhongMaterial({ color: 0x666666 });
+        const keyboard = new THREE.Mesh(keyboardGeometry, keyboardMaterial);
+        keyboard.position.set(0, -0.38, 0);
+        scene.add(keyboard);
+
+        // 키보드 키 생성
+        const keyGeometry = new THREE.BoxGeometry(0.15, 0.01, 0.1);
+        const keyMaterial = new THREE.MeshPhongMaterial({ color: 0x888888 });
+        
+        for (let i = -0.8; i < 0.9; i += 0.3) {
+            for (let j = -0.35; j < 0.35; j += 0.2) {
+                const key = new THREE.Mesh(keyGeometry, keyMaterial);
+                key.position.set(i, -0.37, j);
+                scene.add(key);
+            }
+        }
+
+        // 조명 추가
+        const light = new THREE.PointLight(0xffffff, 1, 100);
+        light.position.set(5, 5, 5);
+        scene.add(light);
+        scene.add(new THREE.AmbientLight(0x404040));
+
+        // 카메라 위치 설정
+        camera.position.set(0, 1, 5);
+
+        // OrbitControls 설정
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true; // 부드러운 회전
+        controls.dampingFactor = 0.25;
+        controls.enableZoom = true; // 줌 기능 활성화
+
+        // 애니메이션 루프
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update(); // OrbitControls 업데이트
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // 윈도우 크기 조정
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
+
+
+<!-- Three.js에서 렌더링 품질을 개선하기 위해 몇 가지 방법이 있습니다. 여기서는 다음과 같은 몇 가지 요소를 조정하여 화질과 프레임을 향상시킬 수 있습니다.
+
+안티앨리어싱 활성화: 렌더러를 생성할 때 안티앨리어싱을 활성화합니다.
+반사 및 조명 조정: 노트북에 약간의 반사를 추가하고 조명을 조정하여 시각적인 효과를 높입니다.
+기본 카메라 조정: 카메라의 시야를 조정하여 더 나은 깊이 표현을 할 수 있습니다.
+이제 마우스 클릭 및 드래그를 통해 아날로그 컴퓨터를 360도 회전시킬 수 있으며, 줌 기능도 활성화됩니다
+ OrbitControls 추가: Three.js의 OrbitControls.js를 CDN으로 불러와 카메라 회전을 제어하도록 설정했습니다.
+
+controls.enableDamping를 true로 설정하여 부드러운 회전 효과를 추가했습니다.
+controls.enableZoom을 true로 설정하여 줌 기능을 활성화했습니다.
+카메라 위치 조정: 카메라의 위치를 (0, 1, 5)로 설정하여 초기 뷰를 더 자연스럽게 만들었습니다.
+
+애니메이션 루프 내 controls.update() 호출: 애니메이션 루프에서 controls.update()를 호출하여 OrbitControls의 상태를 매 프레임마다 업데이트합니다.
+
+배경색 변경: scene.background = new THREE.Color(0xffffff);를 추가하여 배경색을 흰색으로 설정했습니다.
+-->
