@@ -1,18 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Three.js Character Example</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3D Tiger Character</title>
     <style>
-        body { margin: 0; }
-        canvas { display: block; }
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <script type="module">
+      import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.154.0/build/three.module.js";
 
-<!-- index.js 파일을 포함합니다. -->
-<script type="module" src="index.js"></script>
+      // Scene and Camera
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
 
-</body>
+      // Create the body (cylinder for body)
+      const bodyGeometry = new THREE.CylinderGeometry(0.5, 0.5, 1.5, 32);
+      const bodyMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+      scene.add(body);
+
+      // Create the head (sphere)
+      const headGeometry = new THREE.SphereGeometry(0.6, 32, 32);
+      const headMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const head = new THREE.Mesh(headGeometry, headMaterial);
+      head.position.y = 1.2; // Position the head above the body
+      scene.add(head);
+
+      // Create the arms (cylinder)
+      const armGeometry = new THREE.CylinderGeometry(0.15, 0.15, 0.8, 32);
+      const armMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const leftArm = new THREE.Mesh(armGeometry, armMaterial);
+      const rightArm = new THREE.Mesh(armGeometry, armMaterial);
+
+      // Position arms
+      leftArm.position.set(-0.7, 0.5, 0);
+      rightArm.position.set(0.7, 0.5, 0);
+
+      // Rotate arms to give a waving effect
+      leftArm.rotation.z = Math.PI / 6;
+      rightArm.rotation.z = -Math.PI / 6;
+
+      scene.add(leftArm);
+      scene.add(rightArm);
+
+      // Create the legs (cylinder)
+      const legGeometry = new THREE.CylinderGeometry(0.2, 0.2, 0.6, 32);
+      const legMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const leftLeg = new THREE.Mesh(legGeometry, legMaterial);
+      const rightLeg = new THREE.Mesh(legGeometry, legMaterial);
+
+      // Position legs
+      leftLeg.position.set(-0.3, -0.9, 0);
+      rightLeg.position.set(0.3, -0.9, 0);
+      scene.add(leftLeg);
+      scene.add(rightLeg);
+
+      // Create the face features (eyes, nose)
+      const eyeGeometry = new THREE.SphereGeometry(0.08, 16, 16);
+      const eyeMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+      const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+      const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+
+      leftEye.position.set(-0.25, 1.3, 0.55);
+      rightEye.position.set(0.25, 1.3, 0.55);
+      scene.add(leftEye);
+      scene.add(rightEye);
+
+      // Nose (small sphere)
+      const noseGeometry = new THREE.SphereGeometry(0.1, 16, 16);
+      const noseMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+      const nose = new THREE.Mesh(noseGeometry, noseMaterial);
+      nose.position.set(0, 1.1, 0.6);
+      scene.add(nose);
+
+      // Animation loop for 360-degree rotation
+      function animate() {
+        requestAnimationFrame(animate);
+
+        // Rotate the entire scene for a 360-degree view
+        scene.rotation.y += 0.01;
+
+        renderer.render(scene, camera);
+      }
+
+      camera.position.z = 5;
+      animate();
+
+      // Adjust renderer on window resize
+      window.addEventListener("resize", () => {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        renderer.setSize(width, height);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+      });
+    </script>
+  </body>
 </html>
