@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Summer by Hisaishi Joe with Tone.js</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.js"></script>
+  </head>
+  <body>
+    <h1>Playing "Summer" by Hisaishi Joe</h1>
+    <button onclick="playSummer()">Play "Summer"</button>
+
+    <script>
+      // Tone.js에서 사용할 신디사이저 설정
+      const synth = new Tone.Synth().toDestination();
+
+      // "Summer"의 주요 멜로디를 나타내는 음표 배열
+      const summerNotes = [
+        { note: "E4", duration: "8n" },
+        { note: "G4", duration: "8n" },
+        { note: "A4", duration: "8n" },
+        { note: "B4", duration: "4n" },
+        { note: "C5", duration: "8n" },
+        { note: "B4", duration: "8n" },
+        { note: "A4", duration: "8n" },
+        { note: "G4", duration: "8n" },
+
+        { note: "E4", duration: "8n" },
+        { note: "G4", duration: "8n" },
+        { note: "A4", duration: "8n" },
+        { note: "B4", duration: "4n" },
+        { note: "C5", duration: "8n" },
+        { note: "B4", duration: "8n" },
+        { note: "A4", duration: "8n" },
+        { note: "G4", duration: "8n" },
+
+        { note: "E4", duration: "8n" },
+        { note: "G4", duration: "8n" },
+        { note: "A4", duration: "8n" },
+        { note: "B4", duration: "4n" },
+        { note: "C5", duration: "8n" },
+        { note: "B4", duration: "8n" },
+        { note: "A4", duration: "8n" },
+        { note: "G4", duration: "8n" },
+
+        { note: "E4", duration: "4n" },
+        { note: "D4", duration: "4n" },
+        { note: "C4", duration: "4n" },
+        { note: "B3", duration: "4n" },
+      ];
+
+      // "Summer" 멜로디를 연주하는 함수
+      async function playSummer() {
+        // 오디오 컨텍스트를 시작
+        await Tone.start();
+        console.log("Audio is ready");
+
+        let now = Tone.now(); // 현재 시간을 기준으로 음표 재생 타이밍 설정
+
+        // 음표들을 순서대로 재생
+        summerNotes.forEach((n) => {
+          synth.triggerAttackRelease(n.note, n.duration, now);
+          now += Tone.Time(n.duration).toSeconds(); // 음표 길이에 따라 재생 타이밍을 조정
+        });
+      }
+    </script>
+  </body>
+</html>

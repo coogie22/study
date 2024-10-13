@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Water Droplets</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.js"></script>
+</head>
+<body>
+  <script>
+    let droplets = []; // 물방울을 저장할 배열
+
+    function setup() {
+      createCanvas(windowWidth, windowHeight); // 창 크기에 맞는 캔버스 생성
+      background(30, 30, 60); // 어두운 배경색 설정
+    }
+
+    function draw() {
+      background(30, 30, 60, 25); // 배경을 투명하게 덧칠해서 물방울이 잔상처럼 남도록 함
+
+      // 물방울 배열을 순회하면서 각 물방울을 업데이트하고 그리기
+      for (let i = droplets.length - 1; i >= 0; i--) {
+        let d = droplets[i];
+        d.update();  // 물방울 업데이트 (크기, 투명도 등 변화)
+        d.display(); // 물방울 그리기
+        
+        // 물방울이 너무 커지면 배열에서 삭제
+        if (d.isFinished()) {
+          droplets.splice(i, 1);
+        }
+      }
+    }
+
+    // 마우스를 클릭할 때마다 새로운 물방울 생성
+    function mousePressed() {
+      let newDroplet = new Droplet(mouseX, mouseY); // 클릭한 위치에서 새로운 물방울 생성
+      droplets.push(newDroplet); // 물방울을 배열에 추가
+    }
+
+    // 물방울 클래스 정의
+    class Droplet {
+      constructor(x, y) {
+        this.x = x;  // 물방울의 x 위치
+        this.y = y;  // 물방울의 y 위치
+        this.r = 0;  // 초기 반지름
+        this.maxRadius = random(50, 150); // 물방울이 커질 수 있는 최대 크기 (랜덤)
+        this.opacity = 255; // 초기 투명도
+      }
+
+      // 물방울 크기와 투명도 업데이트
+      update() {
+        this.r += 2; // 물방울 반지름 증가
+        this.opacity -= 3; // 시간이 지날수록 투명도 감소
+      }
+
+      // 물방울 그리기
+      display() {
+        noFill();
+        stroke(173, 216, 230, this.opacity); // 연한 파란색 물방울
+        strokeWeight(3);
+        ellipse(this.x, this.y, this.r * 2); // 물방울은 반지름 * 2의 크기로 그려짐
+      }
+
+      // 물방울이 끝났는지 확인 (완전히 투명해지거나 너무 커졌을 때)
+      isFinished() {
+        return this.opacity <= 0 || this.r > this.maxRadius;
+      }
+    }
+
+    // 창 크기가 변경될 때 캔버스 크기도 자동으로 조절
+    function windowResized() {
+      resizeCanvas(windowWidth, windowHeight);
+    }
+  </script>
+</body>
+</html>
