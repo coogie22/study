@@ -1,68 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Summer by Hisaishi Joe with Tone.js</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.js"></script>
-  </head>
-  <body>
-    <h1>Playing "Summer" by Hisaishi Joe</h1>
-    <button onclick="playSummer()">Play "Summer"</button>
-
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>간단한 피아노 곡</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/midi-js/0.3.3/MIDI.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            text-align: center;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>간단한 피아노 곡</h1>
+        <button id="play">연주 시작</button>
+        <button id="stop">연주 중지</button>
+    </div>
     <script>
-      // Tone.js에서 사용할 신디사이저 설정
-      const synth = new Tone.Synth().toDestination();
-
-      // "Summer"의 주요 멜로디를 나타내는 음표 배열
-      const summerNotes = [
-        { note: "E4", duration: "8n" },
-        { note: "G4", duration: "8n" },
-        { note: "A4", duration: "8n" },
-        { note: "B4", duration: "4n" },
-        { note: "C5", duration: "8n" },
-        { note: "B4", duration: "8n" },
-        { note: "A4", duration: "8n" },
-        { note: "G4", duration: "8n" },
-
-        { note: "E4", duration: "8n" },
-        { note: "G4", duration: "8n" },
-        { note: "A4", duration: "8n" },
-        { note: "B4", duration: "4n" },
-        { note: "C5", duration: "8n" },
-        { note: "B4", duration: "8n" },
-        { note: "A4", duration: "8n" },
-        { note: "G4", duration: "8n" },
-
-        { note: "E4", duration: "8n" },
-        { note: "G4", duration: "8n" },
-        { note: "A4", duration: "8n" },
-        { note: "B4", duration: "4n" },
-        { note: "C5", duration: "8n" },
-        { note: "B4", duration: "8n" },
-        { note: "A4", duration: "8n" },
-        { note: "G4", duration: "8n" },
-
-        { note: "E4", duration: "4n" },
-        { note: "D4", duration: "4n" },
-        { note: "C4", duration: "4n" },
-        { note: "B3", duration: "4n" },
-      ];
-
-      // "Summer" 멜로디를 연주하는 함수
-      async function playSummer() {
-        // 오디오 컨텍스트를 시작
-        await Tone.start();
-        console.log("Audio is ready");
-
-        let now = Tone.now(); // 현재 시간을 기준으로 음표 재생 타이밍 설정
-
-        // 음표들을 순서대로 재생
-        summerNotes.forEach((n) => {
-          synth.triggerAttackRelease(n.note, n.duration, now);
-          now += Tone.Time(n.duration).toSeconds(); // 음표 길이에 따라 재생 타이밍을 조정
+        // MIDI.js 초기화
+        MIDI.loadPlugin({
+            soundfontUrl: "https://cdnjs.cloudflare.com/ajax/libs/midi-js/0.3.3/soundfonts/",
+            instruments: ["Acoustic Grand Piano"],
+            callback: function() {
+                console.log("MIDI.js가 로드되었습니다.");
+            }
         });
-      }
+
+        // 피아노 곡을 재생하는 함수
+        function playPiano() {
+            const notes = [60, 62, 64, 65, 67, 69, 71, 72]; // C4부터 B4까지의 음
+            let time = 0;
+
+            notes.forEach((note) => {
+                setTimeout(() => {
+                    MIDI.noteOn(0, note, 127, time); // 노트 재생
+                    MIDI.noteOff(0, note, time + 0.5); // 노트 중지
+                }, time * 500); // 각 음을 0.5초 간격으로 재생
+                time++;
+            });
+        }
+
+        // 버튼 이벤트 리스너 설정
+        document.getElementById("play").addEventListener("click", playPiano);
+        document.getElementById("stop").addEventListener("click", () => {
+            // 모든 음을 중지하는 로직 추가
+            const notes = [60, 62, 64, 65, 67, 69, 71, 72];
+            notes.forEach(note => MIDI.noteOff(0, note));
+        });
     </script>
-  </body>
+</body>
 </html>
