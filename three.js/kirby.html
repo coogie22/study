@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirby with Three.js</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.min.js"></script>
+
+    <script>
+        // 장면(Scene)과 카메라(Camera) 설정
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xffffff); // 흰색 배경
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
+
+        // 렌더러(Renderer) 설정
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Kirby 몸체 (구)
+        const geometry = new THREE.SphereGeometry(1, 32, 32); // 반지름이 1인 구체
+        const material = new THREE.MeshBasicMaterial({ color: 0xffaacc }); // 연분홍색 커비 색상
+        const kirbyBody = new THREE.Mesh(geometry, material);
+        scene.add(kirbyBody);
+
+        // Kirby 발 (구체 2개)
+        const footGeometry = new THREE.SphereGeometry(0.4, 32, 32);
+        const footMaterial = new THREE.MeshBasicMaterial({ color: 0xff5555 }); // 빨간색 발
+        const leftFoot = new THREE.Mesh(footGeometry, footMaterial);
+        const rightFoot = new THREE.Mesh(footGeometry, footMaterial);
+
+        leftFoot.position.set(-0.5, -1, 0);
+        rightFoot.position.set(0.5, -1, 0);
+
+        scene.add(leftFoot);
+        scene.add(rightFoot);
+
+        // Kirby 팔 (구체 2개)
+        const armGeometry = new THREE.SphereGeometry(0.3, 32, 32);
+        const armMaterial = new THREE.MeshBasicMaterial({ color: 0xffaacc }); // 연분홍색 팔
+        const leftArm = new THREE.Mesh(armGeometry, armMaterial);
+        const rightArm = new THREE.Mesh(armGeometry, armMaterial);
+
+        leftArm.position.set(-1.2, 0, 0);
+        rightArm.position.set(1.2, 0, 0);
+
+        scene.add(leftArm);
+        scene.add(rightArm);
+
+        // Kirby 얼굴 (귀여운 눈과 입 추가)
+        // Kirby 눈 (크고 타원형으로)
+        const eyeGeometry = new THREE.SphereGeometry(0.09, 100, 100); // 눈 크기를 크게
+        const eyeMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 }); // 검은색 눈
+        const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+        const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+
+        leftEye.position.set(-0.25, 0.4, 0.9); // Kirby 얼굴 앞쪽에 배치
+        leftEye.scale.set(1, 1.5, 1); // 눈을 타원형으로 만듦
+        rightEye.position.set(0.25, 0.4, 0.9);
+        rightEye.scale.set(1, 1.5, 1); // 타원형
+
+        scene.add(leftEye);
+        scene.add(rightEye);
+
+        // Kirby 입 (작고 둥글게)
+        const mouthGeometry = new THREE.SphereGeometry(0.18, 32, 32); // 작고 둥근 입
+        const mouthMaterial = new THREE.MeshBasicMaterial({ color: 0xff6666 }); // 빨간색 입
+        const mouth = new THREE.Mesh(mouthGeometry, mouthMaterial);
+
+        mouth.position.set(0, -0.2, 0.9); // 얼굴 중앙 아래쪽에 위치
+
+        scene.add(mouth);
+
+        // 애니메이션 함수
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Kirby 몸체 회전 (애니메이션 효과)
+            kirbyBody.rotation.y += 0.01;
+            leftFoot.rotation.y += 0.01;
+            rightFoot.rotation.y += 0.01;
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // 화면 크기 조정 시 카메라 및 렌더러 크기 조정
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+    </script>
+</body>
+</html>
